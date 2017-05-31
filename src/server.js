@@ -11,24 +11,43 @@ const PORT = 4000;
 app.use(bodyParser.json());
 app.use(cors());
 
-async function checkForCoinType(type) {
+const formatPair = (a, b) => `${a}_${b}`;
+
+async function checkForCoinTypes(types) {
   try {
+    const [coinA, coinB] = types;
     const { body } = await shapeshift.getCoins();
-    return has(body, type);
+    return has(body, coinA) && has(body, coinB);
   } catch (e) {
     throw e;
   }
 }
 
-app.get('/exchange-rate/:coin/:amount', async (req, res) => {
+async function getExchangeRate(pair) {
+  try {
+    const { body: { rate } } = await shapeshift.getRate(pair);
+    return rate;
+  } catch (e) {
+    throw e;
+  }
+}
+
+app.get('/exchange-rate/:coinA/:coinB/:amount', async (req, res) => {
   const amount = req.params.amount;
-  const coin = req.params.coin;
-  const isValidCoinType = await checkForCoinType(coin);
+  const coinA = req.params.coinA;
+  const coinB = req.params.coinB;
+  const isValidCoinType = await checkForCoinTypes([coinA, coinB]);
   if (isValidCoinType) {
     // get exchange rate..
-    res.send(200).json({});
+    const pair = formatPair(coinA, coinB);
+    try {
+      const exchangeRate = await getExchangeRate(pair);
+      res.status(200).json({ exchangeRate: exchangeRate });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
   } else {
-    res.status(500).json({ 'error': 'coin type not found' });
+    res.status(500).json({ error: 'coin type not found' });
   }
 });
 

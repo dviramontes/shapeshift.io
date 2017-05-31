@@ -5,7 +5,7 @@
 ## Endpoints:
 
 ### Look up exchange rate for given coin-type:
-#### GET `/exchange-rate/:coin/:amount`
+#### GET `/exchange-rate/:coin-a/:coin-b/:amount`
 
 ---
 
