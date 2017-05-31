@@ -5,7 +5,8 @@
 ## Endpoints:
 
 ### Look up exchange rate for given coin-type:
-#### GET `/exchange-rate/:coin-a/:coin-b/:amount`
+#### GET `/best-exchange-rate/:amount`
+#### Example: `http://localhost:4000/best-exchange-rate/20`
 
 ---
 
