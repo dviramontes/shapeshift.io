@@ -1,5 +1,14 @@
 # shapeshift.com code-exercise
 
+---
+
+## Endpoints:
+
+### Look up exchange rate for given coin-type:
+#### GET `/exchange-rate/:coin/:amount`
+
+---
+
 ## Requirements:
 
 - Node v7 or newer
