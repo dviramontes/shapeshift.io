@@ -16,14 +16,14 @@ async function checkForCoinTypes(types) {
 async function getExchangeRate(pair) {
   try {
     const { body: { rate } } = await shapeshift.getRate(pair);
-    return rate;
+    return +rate;
   } catch (e) {
     throw e;
   }
 }
 
-export default async function getShapeShiftExchangeRate(types) {
-  const [coinA, coinB] = types;
+export default async function getShapeShiftExchangeRate(coinTypes) {
+  const [coinA, coinB] = coinTypes;
   const isValidCoinType = await checkForCoinTypes([coinA, coinB]);
   if (isValidCoinType) {
     const pair = formatPair(coinA, coinB);
